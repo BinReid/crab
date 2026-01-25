@@ -1,0 +1,5 @@
+metric,value
+best_model,Random Forest
+test_accuracy,0.4481976875991839
+f1_score_macro,0.3350441055944423
+train_accuracy,0.9887200997619318

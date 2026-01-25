@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>Классификатор интентов</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+   <style>
+        :root {
+            --primary-color: #4361ee;
+            --success-color: #06d6a0;
+            --warning-color: #ffd166;
+            --danger-color: #ef476f;
+            --dark-color: #2b2d42;
+            --light-color: #f8f9fa;
+        }
+        
+        * {
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: #f5f7ff;
+            color: #333;
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
+            min-height: 100vh;
+        }
+        
+        /* Контейнер для десктопной версии */
+        .container.desktop-full-width {
+            max-width: 100%;
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+        
+        @media (min-width: 992px) {
+            .container.desktop-full-width {
+                max-width: 95%;
+            }
+        }
+        
+        @media (min-width: 1200px) {
+            .container.desktop-full-width {
+                max-width: 90%;
+            }
+        }
+        
+        @media (min-width: 1400px) {
+            .container.desktop-full-width {
+                max-width: 85%;
+            }
+        }
+        
+        /* Основной контент на всю ширину */
+        .main-content-full {
+            width: 100%;
+        }
+        
+        /* Улучшения для мобильных */
+        @media (max-width: 768px) {
+            body {
+                padding: 0;
+                background-color: white;
+            }
+            
+            .container {
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+            
+            h1, h2, h3, h4, h5, h6 {
+                word-break: break-word;
+            }
+        }
+        
+        /* Карточки */
+        .card {
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 1.25rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+            overflow: hidden;
+        }
+        
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+        }
+        
+        @media (max-width: 768px) {
+            .card {
+                border-radius: 12px;
+                margin-bottom: 1rem;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            }
+            
+            .card:hover {
+                transform: none;
+            }
+        }
+        
+        .card-title {
+            color: var(--dark-color);
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+        
+        /* Статус индикатор */
+        .status-indicator {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+        
+        .status-online {
+            background-color: var(--success-color);
+            box-shadow: 0 0 10px rgba(6, 214, 160, 0.5);
+        }
+        
+        .status-offline {
+            background-color: var(--danger-color);
+            box-shadow: 0 0 10px rgba(239, 71, 111, 0.5);
+        }
+        
+        /* Кнопки */
+        .btn {
+            border-radius: 12px;
+            font-weight: 500;
+            padding: 0.75rem 1.5rem;
+            transition: all 0.2s;
+            border: none;
+        }
+        
+        @media (max-width: 768px) {
+            .btn {
+                border-radius: 10px;
+                padding: 0.875rem 1rem;
+                width: 100%;
+            }
+            
+            .btn-sm {
+                padding: 0.5rem 0.75rem;
+                width: auto;
+            }
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), #3a56d4);
+            box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(67, 97, 238, 0.4);
+        }
+        
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+        
+        /* Текстовое поле */
+        .form-control {
+            border-radius: 12px;
+            border: 2px solid #e9ecef;
+            padding: 0.875rem 1rem;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+        
+        @media (max-width: 768px) {
+            .form-control {
+                border-radius: 10px;
+                padding: 1rem;
+                font-size: 16px; /* Предотвращает масштабирование на iOS */
+            }
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.15);
+        }
+        
+        /* Полоса уверенности */
+        .confidence-container {
+            margin: 1.25rem 0;
+        }
+        
+        .confidence-bar {
+            height: 28px;
+            background: linear-gradient(90deg, var(--danger-color) 0%, var(--warning-color) 50%, var(--success-color) 100%);
+            border-radius: 14px;
+            overflow: hidden;
+            position: relative;
+            margin: 0.75rem 0;
+        }
+        
+        @media (max-width: 768px) {
+            .confidence-bar {
+                height: 24px;
+                border-radius: 12px;
+            }
+        }
+        
+        .confidence-fill {
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(4px);
+            border-radius: 14px;
+            transition: width 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        
+        .confidence-value {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            color: white;
+            font-weight: 700;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+            line-height: 28px;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .confidence-value {
+                line-height: 24px;
+                font-size: 0.85rem;
+            }
+        }
+        
+        /* Примеры запросов - адаптивная сетка */
+        .example-queries-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 0.75rem;
+        }
+        
+        @media (min-width: 992px) {
+            .example-queries-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .example-queries-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.5rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .example-queries-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .example-query {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.95rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 70px;
+            word-break: break-word;
+        }
+        
+        @media (max-width: 768px) {
+            .example-query {
+                padding: 0.875rem;
+                min-height: 60px;
+                font-size: 0.9rem;
+            }
+        }
+        
+        .example-query:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(67, 97, 238, 0.15);
+        }
+        
+        /* Результаты */
+        .result-card {
+            border-left: 6px solid var(--primary-color);
+            animation: slideIn 0.4s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Заголовки */
+        .page-title {
+            color: var(--dark-color);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 1.75rem;
+                text-align: center;
+            }
+        }
+        
+        /* Десктопный заголовок на всю ширину */
+        .desktop-header-full {
+            width: 100%;
+            background: linear-gradient(135deg, #4361ee 0%, #3a56d4 100%);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 4px 20px rgba(67, 97, 238, 0.2);
+        }
+        
+        @media (min-width: 992px) {
+            .desktop-header-full {
+                padding-left: 2rem;
+                padding-right: 2rem;
+            }
+        }
+        
+        /* Адаптивная сетка для десктопа */
+        @media (min-width: 992px) {
+            .row-full-width {
+                margin-left: 0;
+                margin-right: 0;
+            }
+            
+            .col-lg-8-full {
+                width: 100%;
+                max-width: 100%;
+                flex: 0 0 100%;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .row {
+                margin-left: -8px;
+                margin-right: -8px;
+            }
+            
+            .col, .col-1, .col-10, .col-11, .col-12, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .col-9, .col-auto, .col-lg, .col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-auto, .col-md, .col-md-1, .col-md-10, .col-md-11, .col-md-12, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-auto, .col-sm, .col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-auto, .col-xl, .col-xl-1, .col-xl-10, .col-xl-11, .col-xl-12, .col-xl-2, .col-xl-3, .col-xl-4, .col-xl-5, .col-xl-6, .col-xl-7, .col-xl-8, .col-xl-9, .col-xl-auto {
+                padding-left: 8px;
+                padding-right: 8px;
+            }
+        }
+        
+        /* Футер */
+        footer {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e9ecef;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            footer {
+                margin-top: 1.5rem;
+                padding-top: 1rem;
+                font-size: 0.85rem;
+            }
+        }
+        
+        /* Спиннеры */
+        .spinner-border {
+            width: 1.25rem;
+            height: 1.25rem;
+            border-width: 0.2em;
+        }
+        
+        /* Адаптивные отступы */
+        .mobile-padding {
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+        
+        /* Улучшенная видимость на маленьких экранах */
+        @media (max-width: 576px) {
+            .small-screen-text {
+                font-size: 0.9rem;
+            }
+            
+            .small-screen-hide {
+                display: none !important;
+            }
+            
+            .small-screen-show {
+                display: block !important;
+            }
+        }
+        
+        /* Иконки */
+        .icon-lg {
+            font-size: 1.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .icon-lg {
+                font-size: 1.25rem;
+            }
+        }
+        
+        /* Всплывающие подсказки на мобильных */
+        @media (hover: none) and (pointer: coarse) {
+            .history-item:active,
+            .example-query:active,
+            .btn:active {
+                opacity: 0.7;
+                transform: scale(0.98);
+            }
+        }
+        
+        /* Безопасная зона для новых iPhone */
+        @supports (padding: max(0px)) {
+            body, .container {
+                padding-left: max(15px, env(safe-area-inset-left));
+                padding-right: max(15px, env(safe-area-inset-right));
+            }
+        }
+        
+        /* Дополнительные правые колонки скрываем на десктопе */
+        @media (min-width: 992px) {
+            .desktop-sidebar {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Мобильный заголовок -->
+    <div class="d-block d-md-none bg-white sticky-top shadow-sm py-3">
+        <div class="container">
+            <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center">
+                    <span id="mobileStatusIndicator" class="status-indicator status-offline"></span>
+                    <h5 class="mb-0 ms-2">Классификатор</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Десктопный заголовок (обновленный) -->
+    <div class="d-none d-md-block desktop-header-full">
+        <div class="container desktop-full-width">
+            <div class="text-center">
+                <h1 class="page-title text-white mb-2">
+                    <i class="fas fa-robot me-2"></i>
+                    Классификатор интентов
+                </h1>
+                <p class="lead text-white-50 mb-0">Определение категорий текстовых запросов</p>
+                <div class="mt-3">
+                    <span id="desktopStatusIndicator" class="status-indicator status-offline"></span>
+                    <span id="statusText" class="text-white small">Проверка соединения...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Основной контейнер (обновленный) -->
+    <div class="container desktop-full-width py-3 py-md-4">
+        <!-- Основной контент -->
+        <div class="row row-full-width">
+            <!-- Левая колонка: Ввод и результаты - теперь на всю ширину -->
+            <div class="col-lg-8-full">
+                <!-- Ввод текста -->
+                <div class="card mb-3 mb-md-4">
+                    <div class="card-body p-3 p-md-4">
+                        <h5 class="card-title d-flex align-items-center">
+                            <i class="fas fa-keyboard text-primary me-2 icon-lg"></i>
+                            Введите текст
+                        </h5>
+                        
+                        <div class="mb-4">
+                            <textarea class="form-control" id="inputText" rows="4" 
+                                      placeholder="Например: 'не могу получить посылку'"
+                                      style="min-height: 120px;"></textarea>
+                            <div class="form-text small-screen-text mt-2">
+                                Можно использовать Ctrl+Enter для отправки
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <button id="classifyBtn" class="btn btn-primary btn-lg w-100">
+                                <i class="fas fa-play me-2"></i>
+                                <span id="buttonText">Классифицировать</span>
+                                <span id="buttonSpinner" class="spinner-border spinner-border-sm d-none ms-2" role="status"></span>
+                            </button>
+                        </div>
+                        
+                        <!-- Примеры запросов -->
+                        <div class="mt-4 pt-3 border-top">
+                            <h6 class="mb-3">
+                                <i class="fas fa-lightbulb text-warning me-2"></i>
+                                Примеры запросов:
+                            </h6>
+                            <div id="exampleQueries" class="example-queries-grid"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Результаты -->
+                <div class="card">
+                    <div class="card-body p-3 p-md-4">
+                        <h5 class="card-title d-flex align-items-center">
+                            <i class="fas fa-chart-bar text-primary me-2 icon-lg"></i>
+                            Результаты
+                        </h5>
+                        <div id="results" class="mt-2">
+                            <div class="text-center text-muted py-4 py-md-5">
+                                <i class="fas fa-arrow-up fa-3x mb-3 text-muted"></i>
+                                <p class="mb-1">Введите текст и нажмите "Классифицировать"</p>
+                                <p class="small text-muted">Результаты появятся здесь</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Правая колонка (скрывается на десктопе) -->
+            <div class="col-lg-4 desktop-sidebar">
+                <!-- Здесь ваши боковые панели для мобильной версии -->
+            </div>
+        </div>
+
+        <!-- Футер -->
+        <footer class="mt-4 mt-md-5 pt-3 pt-md-4 border-top text-center">
+            <p class="mb-1 small-screen-text">Классификатор интентов v1.0</p>
+            <p class="small text-muted">Использует модель Random Forest для классификации текстовых запросов</p>
+        </footer>
+    </div>
+    <!-- Скрипты -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Глобальные переменные
+        let currentResults = null;
+        let mobileMenuOpen = false;
+
+        // Инициализация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            // Проверка соединения
+            checkConnection();
+            
+            // Загрузка информации о системе
+            loadSystemInfo();
+            
+            // Загрузка примеров
+            loadExamples();
+            
+            // Загрузка статистики и истории
+            loadStatistics();
+            loadHistory();
+            
+            // Настройка обработчиков
+            setupEventListeners();
+            
+            // Адаптация для мобильных
+            adaptForMobile();
+        });
+
+        // Адаптация для мобильных устройств
+        function adaptForMobile() {
+            // Улучшение видимости на маленьких экранах
+            if (window.innerWidth <= 768) {
+                // Увеличиваем зону клика для кнопок
+                document.querySelectorAll('.btn, .example-query, .history-item').forEach(el => {
+                    el.style.minHeight = '44px';
+                    el.style.display = 'flex';
+                    el.style.alignItems = 'center';
+                    el.style.justifyContent = 'center';
+                });
+                
+                // Улучшаем читаемость текста
+                document.querySelectorAll('p, span, div').forEach(el => {
+                    if (el.classList.length === 0) {
+                        el.style.fontSize = 'calc(1rem + 0.5vw)';
+                    }
+                });
+            }
+        }
+
+        // Настройка обработчиков событий
+        function setupEventListeners() {
+            // Кнопка классификации
+            const classifyBtn = document.getElementById('classifyBtn');
+            classifyBtn.addEventListener('click', classifyText);
+            classifyBtn.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                this.style.opacity = '0.8';
+            });
+            classifyBtn.addEventListener('touchend', function() {
+                this.style.opacity = '1';
+            });
+            
+            // Текстовое поле
+            const inputText = document.getElementById('inputText');
+            inputText.addEventListener('keydown', function(e) {
+                if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                    classifyText();
+                }
+            });
+            
+            // Мобильная клавиатура (Enter на мобильных)
+            inputText.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && window.innerWidth <= 768) {
+                    e.preventDefault();
+                    classifyText();
+                }
+            });
+            
+            // Кнопки очистки истории
+            const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+            const mobileClearHistoryBtn = document.getElementById('mobileClearHistoryBtn');
+            
+            if (clearHistoryBtn) {
+                clearHistoryBtn.addEventListener('click', clearHistory);
+            }
+            if (mobileClearHistoryBtn) {
+                mobileClearHistoryBtn.addEventListener('click', function() {
+                    clearHistory();
+                    toggleMobileMenu();
+                });
+            }
+            
+            // Обработка изменения размера окна
+            window.addEventListener('resize', adaptForMobile);
+            window.addEventListener('orientationchange', function() {
+                setTimeout(adaptForMobile, 100);
+            });
+        }
+
+        // Проверка соединения
+        async function checkConnection() {
+            try {
+                const response = await fetch('/test_connection');
+                const data = await response.json();
+                
+                const indicators = document.querySelectorAll('.status-indicator');
+                const statusTexts = document.querySelectorAll('#statusText');
+                
+                if (data.success) {
+                    indicators.forEach(indicator => {
+                        indicator.className = 'status-indicator status-online';
+                    });
+                    statusTexts.forEach(el => {
+                        if (el) el.textContent = 'Система работает';
+                    });
+                } else {
+                    indicators.forEach(indicator => {
+                        indicator.className = 'status-indicator status-offline';
+                    });
+                    statusTexts.forEach(el => {
+                        if (el) el.textContent = 'Ошибка: ' + (data.message || 'Неизвестная ошибка');
+                    });
+                }
+            } catch (error) {
+                document.querySelectorAll('.status-indicator').forEach(indicator => {
+                    indicator.className = 'status-indicator status-offline';
+                });
+                document.querySelectorAll('#statusText').forEach(el => {
+                    if (el) el.textContent = 'Ошибка соединения';
+                });
+            }
+        }
+
+        // Загрузка информации о системе
+        async function loadSystemInfo() {
+            try {
+                const response = await fetch('/classifier_info');
+                const data = await response.json();
+                
+                if (data.success) {
+                    const systemInfoDiv = document.getElementById('systemInfo');
+                    systemInfoDiv.innerHTML = `
+                        <div>
+                            <div class="small-screen-text">
+                                <div class="d-flex flex-wrap justify-content-end gap-2">
+                                    <span class="badge bg-info">Модель: ${data.model_info.type || 'RF'}</span>
+                                    <span class="badge bg-secondary">Классов: ${data.original_classes}</span>
+                                    <span class="badge bg-success">Порог: ${(data.confidence_threshold * 100).toFixed(0)}%</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    // Загрузка категорий для десктопа
+                    loadCategories(data.categories);
+                }
+            } catch (error) {
+                console.error('Ошибка загрузки информации:', error);
+            }
+        }
+
+        // Загрузка категорий (десктоп)
+        function loadCategories(categories) {
+            const container = document.getElementById('categoriesList');
+            const countSpan = document.getElementById('categoriesCount');
+            
+            if (categories && categories.length > 0) {
+                container.innerHTML = categories.map(cat => 
+                    `<span class="badge bg-primary category-badge">${cat}</span>`
+                ).join('');
+                countSpan.textContent = categories.length;
+            } else {
+                container.innerHTML = '<p class="text-muted small">Категории не загружены</p>';
+            }
+        }
+
+                // Обновите функцию loadExamples для использования новой сетки
+        async function loadExamples() {
+            try {
+                const response = await fetch('/example_queries');
+                const data = await response.json();
+                
+                if (data.success) {
+                    const container = document.getElementById('exampleQueries');
+                    
+                    let html = '';
+                    data.examples.forEach(example => {
+                        html += `
+                            <div class="example-query" 
+                                 onclick="useExample('${example.text.replace(/'/g, "\\'")}')"
+                                 title="${example.category}">
+                                <div class="mb-1">${example.text}</div>
+                                <small class="text-muted text-truncate">${example.category}</small>
+                            </div>
+                        `;
+                    });
+                    
+                    container.innerHTML = html;
+                }
+            } catch (error) {
+                console.error('Ошибка загрузки примеров:', error);
+            }
+        }
+
+        // Использование примера
+        function useExample(text) {
+            document.getElementById('inputText').value = text;
+            if (window.innerWidth <= 768) {
+                // На мобильных фокусируемся на поле ввода
+                document.getElementById('inputText').focus();
+            }
+            classifyText();
+        }
+
+        // Классификация текста
+        async function classifyText() {
+            const text = document.getElementById('inputText').value.trim();
+            if (!text) {
+                showMobileAlert('Пожалуйста, введите текст для классификации');
+                return;
+            }
+            
+            // Показываем спиннер
+            const button = document.getElementById('classifyBtn');
+            const buttonText = document.getElementById('buttonText');
+            const spinner = document.getElementById('buttonSpinner');
+            
+            button.disabled = true;
+            buttonText.textContent = 'Обработка...';
+            spinner.classList.remove('d-none');
+            
+            // На мобильных скрываем клавиатуру
+            if (window.innerWidth <= 768) {
+                document.activeElement.blur();
+            }
+            
+            try {
+                const response = await fetch('/classify', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ text: text })
+                });
+                
+                const data = await response.json();
+                displayResult(data);
+                
+                // Обновляем статистику и историю
+                loadStatistics();
+                loadHistory();
+                if (mobileMenuOpen) {
+                    loadMobileHistory();
+                }
+                
+            } catch (error) {
+                showMobileAlert('Ошибка соединения: ' + error.message);
+                console.error('Ошибка:', error);
+            } finally {
+                // Скрываем спиннер
+                button.disabled = false;
+                buttonText.textContent = 'Классифицировать';
+                spinner.classList.add('d-none');
+            }
+        }
+
+        // Показ алерта на мобильных
+        function showMobileAlert(message) {
+            if (window.innerWidth <= 768) {
+                // Создаем красивый алерт для мобильных
+                const alertDiv = document.createElement('div');
+                alertDiv.className = 'alert alert-danger position-fixed top-0 start-0 w-100 m-0 rounded-0 border-0';
+                alertDiv.style.zIndex = '1060';
+                alertDiv.style.paddingTop = 'calc(15px + env(safe-area-inset-top))';
+                alertDiv.innerHTML = `
+                    <div class="container">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span>${message}</span>
+                            <button class="btn btn-sm btn-close" onclick="this.parentElement.parentElement.parentElement.remove()"></button>
+                        </div>
+                    </div>
+                `;
+                
+                document.body.appendChild(alertDiv);
+                
+                // Авто-удаление через 3 секунды
+                setTimeout(() => {
+                    if (alertDiv.parentNode) {
+                        alertDiv.remove();
+                    }
+                }, 3000);
+            } else {
+                alert(message);
+            }
+        }
+
+        // Отображение результата
+        function displayResult(data) {
+            const container = document.getElementById('results');
+            
+            if (!data.success) {
+                container.innerHTML = `
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <strong>Ошибка:</strong> ${data.error || 'Неизвестная ошибка'}
+                    </div>
+                `;
+                return;
+            }
+            
+            const confidencePercent = (data.main_confidence * 100).toFixed(1);
+            const confidenceColor = data.is_confident ? 'success' : 'warning';
+            const confidenceWidth = Math.min(100, confidencePercent);
+            
+            // Анимация появления
+            container.style.opacity = '0';
+            container.style.transform = 'translateY(20px)';
+            
+            let html = `
+                <div class="result-card">
+                    <div class="card-body p-3">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div class="flex-grow-1">
+                                <h5 class="text-${confidenceColor} mb-2">
+                                    <i class="fas fa-${data.is_confident ? 'check-circle' : 'exclamation-triangle'} me-2"></i>
+                                    ${data.main_intent}
+                                </h5>
+                                <p class="text-muted small mb-0" style="word-break: break-word;">
+                                    <i class="fas fa-quote-left me-1"></i>
+                                    ${data.text}
+                                </p>
+                            </div>
+                            <div class="ms-3 text-center">
+                                <div class="display-6 fw-bold text-${confidenceColor}">${confidencePercent}%</div>
+                                <small class="text-muted">уверенность</small>
+                            </div>
+                        </div>
+                        
+                        <div class="confidence-container">
+                            <div class="d-flex justify-content-between mb-1">
+                                <small class="text-muted">Уровень уверенности:</small>
+                                <small class="fw-bold">${confidencePercent}%</small>
+                            </div>
+                            <div class="confidence-bar">
+                                <div class="confidence-fill" style="width: ${100 - confidenceWidth}%"></div>
+                                <div class="confidence-value">${confidencePercent}%</div>
+                            </div>
+                            <div class="d-flex justify-content-between mt-1">
+                                <small class="text-muted">Низкая</small>
+                                <small class="text-muted">Высокая</small>
+                            </div>
+                        </div>
+            `;
+            
+            // Дополнительные варианты
+            if (data.all_predictions && data.all_predictions.length > 1) {
+                html += `
+                    <div class="mt-4 pt-3 border-top">
+                        <h6 class="mb-3">
+                            <i class="fas fa-list-ul me-2"></i>
+                            Другие варианты:
+                        </h6>
+                        <div class="row g-2">
+                `;
+                
+                data.all_predictions.slice(1).forEach(pred => {
+                    const predPercent = (pred.confidence * 100).toFixed(1);
+                    const predColor = pred.is_confident ? 'success' : 'warning';
+                    
+                    html += `
+                        <div class="col-${window.innerWidth <= 768 ? '12' : '6'}">
+                            <div class="card border-${predColor} border-2">
+                                <div class="card-body p-2">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="text-truncate pe-2">
+                                            <small>${pred.intent}</small>
+                                        </div>
+                                        <span class="badge bg-${predColor}">${predPercent}%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                html += `
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Время обработки
+            html += `
+                    <div class="mt-3 pt-3 border-top">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">
+                                <i class="fas fa-clock me-1"></i>
+                                ${data.timestamp || new Date().toLocaleString('ru-RU')}
+                            </small>
+                            <button class="btn btn-sm btn-outline-primary" onclick="shareResult()">
+                                <i class="fas fa-share-alt me-1"></i>
+                                Поделиться
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            container.innerHTML = html;
+            currentResults = data;
+            
+            // Анимация появления
+            setTimeout(() => {
+                container.style.opacity = '1';
+                container.style.transform = 'translateY(0)';
+                container.style.transition = 'opacity 0.3s, transform 0.3s';
+            }, 10);
+            
+            // Прокрутка к результатам на мобильных
+            if (window.innerWidth <= 768) {
+                setTimeout(() => {
+                    container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+            }
+        }
+
+        // Поделиться результатом
+        function shareResult() {
+            if (!currentResults) return;
+            
+            const text = `Классификатор определил: "${currentResults.main_intent}" с уверенностью ${(currentResults.main_confidence * 100).toFixed(1)}%`;
+            
+            if (navigator.share && window.innerWidth <= 768) {
+                navigator.share({
+                    title: 'Результат классификации',
+                    text: text,
+                    url: window.location.href
+                });
+            } else {
+                navigator.clipboard.writeText(text).then(() => {
+                    showMobileAlert('Результат скопирован в буфер обмена!');
+                });
+            }
+        }
+
+        // Загрузка статистики
+        async function loadStatistics() {
+            try {
+                const response = await fetch('/statistics');
+                const data = await response.json();
+                
+                if (data.success) {
+                    const container = document.getElementById('statistics');
+                    const isMobile = window.innerWidth <= 768;
+                    
+                    container.innerHTML = `
+                        <div class="${isMobile ? 'small' : ''}">
+                            <div class="d-flex flex-wrap gap-2 mb-2">
+                                <span class="badge bg-primary">Всего: ${data.total_queries}</span>
+                                <span class="badge bg-success">Сегодня: ${data.queries_today}</span>
+                                <span class="badge bg-info">Уверенность: ${(data.confidence_stats.avg_confidence * 100).toFixed(1)}%</span>
+                            </div>
+                            ${!isMobile ? `
+                                <div class="mt-2">
+                                    <small class="text-muted d-block">Уверенных ответов: ${data.confidence_stats.confident_queries}</small>
+                                    ${Object.keys(data.categories_used).length > 0 ? `
+                                        <small class="text-muted d-block mt-1">Использовано категорий: ${Object.keys(data.categories_used).length}</small>
+                                    ` : ''}
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Ошибка загрузки статистики:', error);
+            }
+        }
+
+        // Загрузка истории
+        async function loadHistory() {
+            try {
+                const response = await fetch('/history');
+                const data = await response.json();
+                
+                if (data.success && data.history.length > 0) {
+                    const container = document.getElementById('history');
+                    const isMobile = window.innerWidth <= 768;
+                    
+                    let historyHtml = '';
+                    data.history.slice().reverse().forEach((item, index) => {
+                        if (index < (isMobile ? 3 : 5)) {
+                            const result = item.result;
+                            const color = result.main_confidence >= 0.7 ? 'success' : 'warning';
+                            const time = item.timestamp.substring(11, 16);
+                            
+                            historyHtml += `
+                                <div class="history-item" 
+                                     onclick="useHistoryItem('${item.text.replace(/'/g, "\\'")}')">
+                                    <div class="d-flex justify-content-between align-items-start mb-1">
+                                        <span class="badge bg-${color}">${result.main_intent.substring(0, 15)}${result.main_intent.length > 15 ? '...' : ''}</span>
+                                        <small class="text-muted">${time}</small>
+                                    </div>
+                                    <div class="small text-truncate">${item.text}</div>
+                                    <div class="text-end mt-1">
+                                        <small class="badge bg-secondary">${(result.main_confidence * 100).toFixed(0)}%</small>
+                                    </div>
+                                </div>
+                            `;
+                        }
+                    });
+                    
+                    container.innerHTML = historyHtml || `
+                        <div class="text-center text-muted p-3">
+                            <i class="fas fa-clock fa-2x mb-2"></i>
+                            <p class="small">История пуста</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Ошибка загрузки истории:', error);
+            }
+        }
+
+        // Использование элемента истории
+        function useHistoryItem(text) {
+            document.getElementById('inputText').value = text;
+            classifyText();
+            
+            // Закрываем мобильное меню если оно открыто
+            if (mobileMenuOpen) {
+                toggleMobileMenu();
+            }
+        }
+
+        // Очистка истории
+        async function clearHistory() {
+            if (window.innerWidth <= 768) {
+                if (!confirm('Очистить историю запросов?')) return;
+            } else {
+                if (!confirm('Вы уверены, что хотите очистить историю запросов?')) return;
+            }
+            
+            try {
+                const response = await fetch('/clear_history', {
+                    method: 'POST'
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    loadHistory();
+                    loadStatistics();
+                    if (mobileMenuOpen) {
+                        loadMobileHistory();
+                    }
+                    showMobileAlert('История очищена');
+                }
+            } catch (error) {
+                showMobileAlert('Ошибка при очистке истории: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>
