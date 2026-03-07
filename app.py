@@ -569,6 +569,20 @@ def test_connection():
             'message': str(e)
         })
 
+@app.route('/speech_config')
+def speech_config():
+    """API для получения конфигурации распознавания речи"""
+    return jsonify({
+        'success': True,
+        'languages': [
+            {'code': 'ru-RU', 'name': 'Русский'}
+        ],
+        'default_language': 'ru-RU',
+        'continuous_mode': True,
+        'interim_results': True,
+        'max_alternatives': 3
+    })
+
 if __name__ == '__main__':
     print("="*60)
     print("Flask веб-сервер для классификатора интентов")
@@ -590,8 +604,8 @@ if __name__ == '__main__':
         print("   - models/best_model_random_forest.joblib")
         print("   - models/tfidf_vectorizer.joblib")
     
-    print("\n🌐 Запуск сервера на http://localhost:5000")
+    print("\n🌐 Запуск сервера на http://localhost:8000")
     print("   Для остановки нажмите Ctrl+C")
     print("="*60)
     
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True, host='0.0.0.0', port=8000)

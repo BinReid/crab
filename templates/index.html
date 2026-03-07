@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-    <title>Классификатор интентов</title>
+    <title>Классификатор интентов с голосовым вводом</title>
     
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -11,7 +11,10 @@
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     
-   <style>
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    
+    <style>
         :root {
             --primary-color: #4361ee;
             --success-color: #06d6a0;
@@ -19,6 +22,7 @@
             --danger-color: #ef476f;
             --dark-color: #2b2d42;
             --light-color: #f8f9fa;
+            --voice-color: #8338ec;
         }
         
         * {
@@ -168,6 +172,87 @@
         
         .btn-primary:active {
             transform: translateY(0);
+        }
+        
+        /* Кнопка голосового ввода */
+        .btn-voice {
+            background: linear-gradient(135deg, var(--voice-color), #6d3fc9);
+            box-shadow: 0 4px 12px rgba(131, 56, 236, 0.3);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-voice:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(131, 56, 236, 0.4);
+            color: white;
+        }
+        
+        .btn-voice.recording {
+            animation: pulse 1.5s infinite;
+            background: linear-gradient(135deg, #ef476f, #d64161);
+        }
+        
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(239, 71, 111, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 15px rgba(239, 71, 111, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(239, 71, 111, 0);
+            }
+        }
+        
+        /* Волны звука */
+        .voice-waves {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            height: 30px;
+            margin-top: 10px;
+        }
+        
+        .voice-wave {
+            width: 4px;
+            height: 15px;
+            background: var(--voice-color);
+            border-radius: 2px;
+            animation: wave 1s ease-in-out infinite;
+        }
+        
+        .voice-wave:nth-child(2) {
+            animation-delay: 0.2s;
+            height: 25px;
+        }
+        
+        .voice-wave:nth-child(3) {
+            animation-delay: 0.4s;
+            height: 20px;
+        }
+        
+        .voice-wave:nth-child(4) {
+            animation-delay: 0.6s;
+            height: 30px;
+        }
+        
+        .voice-wave:nth-child(5) {
+            animation-delay: 0.8s;
+            height: 18px;
+        }
+        
+        @keyframes wave {
+            0%, 100% {
+                transform: scaleY(0.5);
+                opacity: 0.5;
+            }
+            50% {
+                transform: scaleY(1.5);
+                opacity: 1;
+            }
         }
         
         /* Текстовое поле */
@@ -448,6 +533,86 @@
                 display: none;
             }
         }
+        
+        /* Селектор языка */
+        .language-selector {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 100;
+        }
+        
+        @media (max-width: 768px) {
+            .language-selector {
+                position: static;
+                margin-bottom: 10px;
+            }
+        }
+        
+        .language-selector select {
+            border-radius: 20px;
+            padding: 5px 15px;
+            border: 2px solid var(--primary-color);
+            background: white;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        
+        /* Индикатор распознавания */
+        .recognition-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 15px;
+            background: rgba(131, 56, 236, 0.1);
+            border-radius: 30px;
+            margin-top: 10px;
+        }
+        
+        .recognition-dot {
+            width: 10px;
+            height: 10px;
+            background: var(--voice-color);
+            border-radius: 50%;
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.3;
+            }
+        }
+        
+        /* Транскрипция в реальном времени */
+        .interim-transcript {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 10px;
+            margin-top: 10px;
+            font-style: italic;
+            color: #666;
+            border-left: 3px solid var(--voice-color);
+        }
+        
+        /* Группа кнопок */
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        @media (max-width: 768px) {
+            .button-group {
+                flex-direction: column;
+            }
+        }
+        
+        .button-group .btn {
+            flex: 1;
+        }
     </style>
 </head>
 <body>
@@ -469,7 +634,7 @@
             <div class="text-center">
                 <h1 class="page-title text-white mb-2">
                     <i class="fas fa-robot me-2"></i>
-                    Классификатор интентов
+                    Классификатор интентов с голосовым вводом
                 </h1>
                 <p class="lead text-white-50 mb-0">Определение категорий текстовых запросов</p>
                 <div class="mt-3">
@@ -486,12 +651,13 @@
         <div class="row row-full-width">
             <!-- Левая колонка: Ввод и результаты - теперь на всю ширину -->
             <div class="col-lg-8-full">
+                
                 <!-- Ввод текста -->
                 <div class="card mb-3 mb-md-4">
                     <div class="card-body p-3 p-md-4">
                         <h5 class="card-title d-flex align-items-center">
                             <i class="fas fa-keyboard text-primary me-2 icon-lg"></i>
-                            Введите текст
+                            Введите текст или используйте голос
                         </h5>
                         
                         <div class="mb-4">
@@ -499,16 +665,47 @@
                                       placeholder="Например: 'не могу получить посылку'"
                                       style="min-height: 120px;"></textarea>
                             <div class="form-text small-screen-text mt-2">
-                                Можно использовать Ctrl+Enter для отправки
+                                Можно использовать Ctrl+Enter для отправки или голосовой ввод
                             </div>
                         </div>
                         
-                        <div class="mb-4">
-                            <button id="classifyBtn" class="btn btn-primary btn-lg w-100">
+                        <!-- Индикатор распознавания (скрыт по умолчанию) -->
+                        <div id="recognitionIndicator" class="recognition-indicator d-none">
+                            <span class="recognition-dot"></span>
+                            <span id="recognitionStatus">Говорите...</span>
+                            <small class="text-muted" id="recognitionLanguage"></small>
+                        </div>
+                        
+                        <!-- Промежуточные результаты распознавания -->
+                        <div id="interimTranscript" class="interim-transcript d-none"></div>
+                        
+                        <!-- Группа кнопок -->
+                        <div class="button-group mb-4">
+                            <button id="classifyBtn" class="btn btn-primary btn-lg">
                                 <i class="fas fa-play me-2"></i>
                                 <span id="buttonText">Классифицировать</span>
                                 <span id="buttonSpinner" class="spinner-border spinner-border-sm d-none ms-2" role="status"></span>
                             </button>
+                            
+                            <button id="voiceBtn" class="btn btn-voice btn-lg">
+                                <i class="fas fa-microphone me-2"></i>
+                                <span id="voiceBtnText">Голосовой ввод</span>
+                            </button>
+                        </div>
+                        
+                        <!-- Волны звука (отображаются при записи) -->
+                        <div id="voiceWaves" class="voice-waves d-none">
+                            <div class="voice-wave"></div>
+                            <div class="voice-wave"></div>
+                            <div class="voice-wave"></div>
+                            <div class="voice-wave"></div>
+                            <div class="voice-wave"></div>
+                        </div>
+                        
+                        <!-- Сообщение об ошибке голосового ввода -->
+                        <div id="voiceError" class="alert alert-warning d-none mt-3">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <span id="voiceErrorMessage"></span>
                         </div>
                         
                         <!-- Примеры запросов -->
@@ -532,7 +729,7 @@
                         <div id="results" class="mt-2">
                             <div class="text-center text-muted py-4 py-md-5">
                                 <i class="fas fa-arrow-up fa-3x mb-3 text-muted"></i>
-                                <p class="mb-1">Введите текст и нажмите "Классифицировать"</p>
+                                <p class="mb-1">Введите текст или используйте голос</p>
                                 <p class="small text-muted">Результаты появятся здесь</p>
                             </div>
                         </div>
@@ -548,19 +745,35 @@
 
         <!-- Футер -->
         <footer class="mt-4 mt-md-5 pt-3 pt-md-4 border-top text-center">
-            <p class="mb-1 small-screen-text">Классификатор интентов v1.0</p>
-            <p class="small text-muted">Использует модель Random Forest для классификации текстовых запросов</p>
+            <p class="mb-1 small-screen-text">Классификатор интентов v2.0 с голосовым вводом</p>
+            <p class="small text-muted">Использует модель Random Forest и Web Speech API</p>
         </footer>
     </div>
+    
     <!-- Скрипты -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // Глобальные переменные
         let currentResults = null;
         let mobileMenuOpen = false;
+        
+        // Переменные для голосового ввода
+        let recognition = null;
+        let isRecording = false;
+        let finalTranscript = '';
+        let recognitionSupported = false;
+        let currentLanguage = 'ru-RU';
+        let autoDetectLanguage = false;
+        let recognitionTimeout = null;
 
         // Инициализация при загрузке страницы
         document.addEventListener('DOMContentLoaded', function() {
+            // Проверка поддержки голосового ввода
+            checkSpeechRecognitionSupport();
+            
+            // Загрузка конфигурации распознавания речи
+            loadSpeechConfig();
+            
             // Проверка соединения
             checkConnection();
             
@@ -581,6 +794,261 @@
             adaptForMobile();
         });
 
+        // Проверка поддержки Web Speech API
+        function checkSpeechRecognitionSupport() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            
+            if (SpeechRecognition) {
+                recognitionSupported = true;
+                recognition = new SpeechRecognition();
+                
+                // Настройка распознавания
+                recognition.continuous = true;
+                recognition.interimResults = true;
+                recognition.maxAlternatives = 3;
+                
+                // Обработка результатов
+                recognition.onresult = handleRecognitionResult;
+                recognition.onerror = handleRecognitionError;
+                recognition.onend = handleRecognitionEnd;
+                recognition.onstart = handleRecognitionStart;
+            } else {
+                recognitionSupported = false;
+                console.warn('Web Speech API не поддерживается в этом браузере');
+            }
+        }
+        
+        // Загрузка конфигурации распознавания речи
+        async function loadSpeechConfig() {
+            try {
+                const response = await fetch('/speech_config');
+                const config = await response.json();
+                
+                if (config.success) {
+                    // Заполняем селекторы языков
+                    const desktopSelect = document.getElementById('desktopLanguageSelect');
+                    const mobileSelect = document.getElementById('mobileLanguageSelect');
+                    
+                    let options = '';
+                    config.languages.forEach(lang => {
+                        options += `<option value="${lang.code}">${lang.name}</option>`;
+                    });
+                    
+                    desktopSelect.innerHTML = options;
+                    mobileSelect.innerHTML = options;
+                    
+                    // Устанавливаем язык по умолчанию
+                    desktopSelect.value = config.default_language;
+                    mobileSelect.value = config.default_language;
+                    currentLanguage = config.default_language;
+                }
+            } catch (error) {
+                console.error('Ошибка загрузки конфигурации речи:', error);
+            }
+        }
+        
+        // Обработка результатов распознавания
+        function handleRecognitionResult(event) {
+            let interimTranscript = '';
+            let newFinalTranscript = '';
+            
+            for (let i = event.resultIndex; i < event.results.length; ++i) {
+                const transcript = event.results[i][0].transcript;
+                
+                if (event.results[i].isFinal) {
+                    newFinalTranscript += transcript + ' ';
+                } else {
+                    interimTranscript += transcript;
+                }
+            }
+            
+            // Обновляем финальный результат
+            if (newFinalTranscript) {
+                finalTranscript += newFinalTranscript;
+                document.getElementById('inputText').value = finalTranscript;
+            }
+            
+            // Показываем промежуточные результаты
+            const interimElement = document.getElementById('interimTranscript');
+            if (interimTranscript) {
+                interimElement.textContent = '⏺ ' + interimTranscript;
+                interimElement.classList.remove('d-none');
+            } else {
+                interimElement.classList.add('d-none');
+            }
+            
+            // Автоматическая классификация при паузе (опционально)
+            if (newFinalTranscript && recognitionTimeout) {
+                clearTimeout(recognitionTimeout);
+                recognitionTimeout = setTimeout(() => {
+                    if (finalTranscript.trim()) {
+                        classifyText();
+                    }
+                }, 1500);
+            }
+        }
+        
+        // Обработка ошибок распознавания
+        function handleRecognitionError(event) {
+            console.error('Ошибка распознавания:', event.error);
+            
+            let errorMessage = '';
+            switch(event.error) {
+                case 'no-speech':
+                    errorMessage = 'Речь не обнаружена. Попробуйте еще раз.';
+                    break;
+                case 'audio-capture':
+                    errorMessage = 'Микрофон не найден или недоступен.';
+                    break;
+                case 'not-allowed':
+                    errorMessage = 'Доступ к микрофону запрещен. Разрешите доступ в настройках браузера.';
+                    break;
+                case 'network':
+                    errorMessage = 'Ошибка сети. Проверьте подключение к интернету.';
+                    break;
+                default:
+                    errorMessage = 'Ошибка распознавания: ' + event.error;
+            }
+            
+            showVoiceError(errorMessage);
+            stopRecording();
+        }
+        
+        // Обработка завершения распознавания
+        function handleRecognitionEnd() {
+            if (isRecording) {
+                // Если запись еще активна (например, при паузе), перезапускаем
+                try {
+                    recognition.start();
+                } catch (e) {
+                    console.warn('Не удалось перезапустить распознавание:', e);
+                    stopRecording();
+                }
+            } else {
+                // Нормальное завершение
+                document.getElementById('voiceWaves').classList.add('d-none');
+                document.getElementById('recognitionIndicator').classList.add('d-none');
+                document.getElementById('interimTranscript').classList.add('d-none');
+            }
+        }
+        
+        // Обработка начала распознавания
+        function handleRecognitionStart() {
+            document.getElementById('voiceWaves').classList.remove('d-none');
+            document.getElementById('recognitionIndicator').classList.remove('d-none');
+        }
+        
+        // Показ ошибки голосового ввода
+        function showVoiceError(message) {
+            const errorElement = document.getElementById('voiceError');
+            const errorMessageElement = document.getElementById('voiceErrorMessage');
+            
+            errorMessageElement.textContent = message;
+            errorElement.classList.remove('d-none');
+            
+            setTimeout(() => {
+                errorElement.classList.add('d-none');
+            }, 5000);
+        }
+        
+        // Начало записи
+        function startRecording() {
+            if (!recognitionSupported) {
+                showVoiceError('Голосовой ввод не поддерживается в вашем браузере. Используйте Chrome, Edge или Safari.');
+                return;
+            }
+            
+            if (isRecording) {
+                stopRecording();
+                return;
+            }
+            
+            // Запрашиваем разрешение на микрофон
+            navigator.mediaDevices.getUserMedia({ audio: true })
+                .then(() => {
+                    // Получаем выбранный язык
+                    const desktopSelect = document.getElementById('desktopLanguageSelect');
+                    const mobileSelect = document.getElementById('mobileLanguageSelect');
+                    const isMobile = window.innerWidth <= 768;
+                    
+                    let selectedLang = isMobile ? mobileSelect.value : desktopSelect.value;
+                    
+                    if (selectedLang === 'auto') {
+                        // Для автоопределения используем пустой язык (браузер определит сам)
+                        recognition.lang = '';
+                        document.getElementById('recognitionLanguage').textContent = 'Автоопределение';
+                    } else {
+                        recognition.lang = selectedLang;
+                        document.getElementById('recognitionLanguage').textContent = 
+                            desktopSelect.options[desktopSelect.selectedIndex].text;
+                    }
+                    
+                    currentLanguage = selectedLang;
+                    
+                    // Очищаем предыдущий результат
+                    finalTranscript = '';
+                    
+                    // Начинаем запись
+                    recognition.start();
+                    isRecording = true;
+                    
+                    // Обновляем UI
+                    const voiceBtn = document.getElementById('voiceBtn');
+                    const voiceBtnText = document.getElementById('voiceBtnText');
+                    
+                    voiceBtn.classList.add('recording');
+                    voiceBtnText.innerHTML = '<i class="fas fa-stop me-2"></i>Остановить';
+                    
+                    document.getElementById('recognitionStatus').textContent = 'Говорите...';
+                    document.getElementById('voiceError').classList.add('d-none');
+                    
+                    // Автоматическая остановка через 30 секунд (для экономии ресурсов)
+                    setTimeout(() => {
+                        if (isRecording) {
+                            stopRecording();
+                        }
+                    }, 30000);
+                })
+                .catch(error => {
+                    console.error('Ошибка доступа к микрофону:', error);
+                    showVoiceError('Не удалось получить доступ к микрофону. Проверьте разрешения.');
+                });
+        }
+        
+        // Остановка записи
+        function stopRecording() {
+            if (recognition && isRecording) {
+                try {
+                    recognition.stop();
+                } catch (e) {
+                    console.warn('Ошибка при остановке распознавания:', e);
+                }
+            }
+            
+            isRecording = false;
+            
+            // Обновляем UI
+            const voiceBtn = document.getElementById('voiceBtn');
+            const voiceBtnText = document.getElementById('voiceBtnText');
+            
+            voiceBtn.classList.remove('recording');
+            voiceBtnText.innerHTML = '<i class="fas fa-microphone me-2"></i>Голосовой ввод';
+            
+            document.getElementById('voiceWaves').classList.add('d-none');
+            document.getElementById('recognitionIndicator').classList.add('d-none');
+            document.getElementById('interimTranscript').classList.add('d-none');
+            
+            // Очищаем таймаут
+            if (recognitionTimeout) {
+                clearTimeout(recognitionTimeout);
+            }
+            
+            // Если есть текст, классифицируем
+            if (finalTranscript.trim()) {
+                classifyText();
+            }
+        }
+        
         // Адаптация для мобильных устройств
         function adaptForMobile() {
             // Улучшение видимости на маленьких экранах
@@ -615,6 +1083,16 @@
                 this.style.opacity = '1';
             });
             
+            // Кнопка голосового ввода
+            const voiceBtn = document.getElementById('voiceBtn');
+            voiceBtn.addEventListener('click', function() {
+                if (isRecording) {
+                    stopRecording();
+                } else {
+                    startRecording();
+                }
+            });
+            
             // Текстовое поле
             const inputText = document.getElementById('inputText');
             inputText.addEventListener('keydown', function(e) {
@@ -629,6 +1107,20 @@
                     e.preventDefault();
                     classifyText();
                 }
+            });
+            
+            // Синхронизация селекторов языка
+            const desktopSelect = document.getElementById('desktopLanguageSelect');
+            const mobileSelect = document.getElementById('mobileLanguageSelect');
+            
+            desktopSelect.addEventListener('change', function() {
+                mobileSelect.value = this.value;
+                currentLanguage = this.value;
+            });
+            
+            mobileSelect.addEventListener('change', function() {
+                desktopSelect.value = this.value;
+                currentLanguage = this.value;
             });
             
             // Кнопки очистки истории
@@ -729,7 +1221,7 @@
             }
         }
 
-                // Обновите функцию loadExamples для использования новой сетки
+        // Обновите функцию loadExamples для использования новой сетки
         async function loadExamples() {
             try {
                 const response = await fetch('/example_queries');
