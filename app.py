@@ -137,7 +137,7 @@ def predict_intent(text):
         optimized_probs = {}
         
         for i, orig_class in enumerate(classifier.classes_):
-            prob = float(probabilities[i])  # Конвертируем сразу в float
+            prob = float(probabilities[i])
             orig_class_str = str(orig_class)
             opt_class = class_mapping.get(orig_class_str, 'общий_вопрос')
             
@@ -158,7 +158,7 @@ def predict_intent(text):
             'text': text,
             'main_intent': best_class,
             'main_confidence': best_confidence,
-            'is_confident': bool(best_confidence >= confidence_threshold),  # Явное преобразование в bool
+            'is_confident': bool(best_confidence >= confidence_threshold),
             'all_predictions': [
                 {
                     'intent': intent,
@@ -185,7 +185,7 @@ def predict_intent(text):
         original_top = []
         for idx in top_original_indices:
             original_top.append({
-                'class': str(classifier.classes_[int(idx)]),  # Явное преобразование в int
+                'class': str(classifier.classes_[int(idx)]),
                 'confidence': float(probabilities[int(idx)])
             })
         result['original_top3'] = original_top
@@ -204,7 +204,6 @@ class QueryHistory:
         self.history = []
     
     def add_query(self, text, result):
-        # Очищаем результат от numpy типов
         cleaned_result = numpy_to_python(result)
         self.history.append({
             'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
@@ -545,7 +544,6 @@ def test_connection():
     try:
         result = predict_intent(test_phrase)
         if result:
-            # Очищаем результат
             cleaned_result = numpy_to_python(result)
             response = {
                 'success': True,
@@ -568,20 +566,6 @@ def test_connection():
             'status': 'error',
             'message': str(e)
         })
-
-@app.route('/speech_config')
-def speech_config():
-    """API для получения конфигурации распознавания речи"""
-    return jsonify({
-        'success': True,
-        'languages': [
-            {'code': 'ru-RU', 'name': 'Русский'}
-        ],
-        'default_language': 'ru-RU',
-        'continuous_mode': True,
-        'interim_results': True,
-        'max_alternatives': 3
-    })
 
 if __name__ == '__main__':
     print("="*60)

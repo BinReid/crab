@@ -11,9 +11,6 @@
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     
-    <!-- Animate.css -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-    
     <style>
         :root {
             --primary-color: #4361ee;
@@ -38,7 +35,6 @@
             min-height: 100vh;
         }
         
-        /* Контейнер для десктопной версии */
         .container.desktop-full-width {
             max-width: 100%;
             padding-left: 2rem;
@@ -51,24 +47,6 @@
             }
         }
         
-        @media (min-width: 1200px) {
-            .container.desktop-full-width {
-                max-width: 90%;
-            }
-        }
-        
-        @media (min-width: 1400px) {
-            .container.desktop-full-width {
-                max-width: 85%;
-            }
-        }
-        
-        /* Основной контент на всю ширину */
-        .main-content-full {
-            width: 100%;
-        }
-        
-        /* Улучшения для мобильных */
         @media (max-width: 768px) {
             body {
                 padding: 0;
@@ -79,13 +57,8 @@
                 padding-left: 15px;
                 padding-right: 15px;
             }
-            
-            h1, h2, h3, h4, h5, h6 {
-                word-break: break-word;
-            }
         }
         
-        /* Карточки */
         .card {
             border: none;
             border-radius: 16px;
@@ -118,7 +91,6 @@
             margin-bottom: 0.75rem;
         }
         
-        /* Статус индикатор */
         .status-indicator {
             width: 14px;
             height: 14px;
@@ -138,7 +110,6 @@
             box-shadow: 0 0 10px rgba(239, 71, 111, 0.5);
         }
         
-        /* Кнопки */
         .btn {
             border-radius: 12px;
             font-weight: 500;
@@ -170,11 +141,6 @@
             box-shadow: 0 6px 16px rgba(67, 97, 238, 0.4);
         }
         
-        .btn-primary:active {
-            transform: translateY(0);
-        }
-        
-        /* Кнопка голосового ввода */
         .btn-voice {
             background: linear-gradient(135deg, var(--voice-color), #6d3fc9);
             box-shadow: 0 4px 12px rgba(131, 56, 236, 0.3);
@@ -206,7 +172,6 @@
             }
         }
         
-        /* Волны звука */
         .voice-waves {
             display: flex;
             align-items: center;
@@ -255,7 +220,6 @@
             }
         }
         
-        /* Текстовое поле */
         .form-control {
             border-radius: 12px;
             border: 2px solid #e9ecef;
@@ -268,7 +232,7 @@
             .form-control {
                 border-radius: 10px;
                 padding: 1rem;
-                font-size: 16px; /* Предотвращает масштабирование на iOS */
+                font-size: 16px;
             }
         }
         
@@ -277,7 +241,6 @@
             box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.15);
         }
         
-        /* Полоса уверенности */
         .confidence-container {
             margin: 1.25rem 0;
         }
@@ -324,7 +287,6 @@
             }
         }
         
-        /* Примеры запросов - адаптивная сетка */
         .example-queries-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -379,7 +341,6 @@
             box-shadow: 0 4px 12px rgba(67, 97, 238, 0.15);
         }
         
-        /* Результаты */
         .result-card {
             border-left: 6px solid var(--primary-color);
             animation: slideIn 0.4s ease-out;
@@ -396,7 +357,6 @@
             }
         }
         
-        /* Заголовки */
         .page-title {
             color: var(--dark-color);
             font-weight: 700;
@@ -410,7 +370,6 @@
             }
         }
         
-        /* Десктопный заголовок на всю ширину */
         .desktop-header-full {
             width: 100%;
             background: linear-gradient(135deg, #4361ee 0%, #3a56d4 100%);
@@ -428,7 +387,6 @@
             }
         }
         
-        /* Адаптивная сетка для десктопа */
         @media (min-width: 992px) {
             .row-full-width {
                 margin-left: 0;
@@ -454,7 +412,6 @@
             }
         }
         
-        /* Футер */
         footer {
             margin-top: 2rem;
             padding-top: 1.5rem;
@@ -470,35 +427,12 @@
             }
         }
         
-        /* Спиннеры */
         .spinner-border {
             width: 1.25rem;
             height: 1.25rem;
             border-width: 0.2em;
         }
         
-        /* Адаптивные отступы */
-        .mobile-padding {
-            padding-left: 15px;
-            padding-right: 15px;
-        }
-        
-        /* Улучшенная видимость на маленьких экранах */
-        @media (max-width: 576px) {
-            .small-screen-text {
-                font-size: 0.9rem;
-            }
-            
-            .small-screen-hide {
-                display: none !important;
-            }
-            
-            .small-screen-show {
-                display: block !important;
-            }
-        }
-        
-        /* Иконки */
         .icon-lg {
             font-size: 1.5rem;
         }
@@ -509,7 +443,6 @@
             }
         }
         
-        /* Всплывающие подсказки на мобильных */
         @media (hover: none) and (pointer: coarse) {
             .history-item:active,
             .example-query:active,
@@ -519,7 +452,6 @@
             }
         }
         
-        /* Безопасная зона для новых iPhone */
         @supports (padding: max(0px)) {
             body, .container {
                 padding-left: max(15px, env(safe-area-inset-left));
@@ -527,38 +459,12 @@
             }
         }
         
-        /* Дополнительные правые колонки скрываем на десктопе */
         @media (min-width: 992px) {
             .desktop-sidebar {
                 display: none;
             }
         }
         
-        /* Селектор языка */
-        .language-selector {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            z-index: 100;
-        }
-        
-        @media (max-width: 768px) {
-            .language-selector {
-                position: static;
-                margin-bottom: 10px;
-            }
-        }
-        
-        .language-selector select {
-            border-radius: 20px;
-            padding: 5px 15px;
-            border: 2px solid var(--primary-color);
-            background: white;
-            font-size: 0.9rem;
-            cursor: pointer;
-        }
-        
-        /* Индикатор распознавания */
         .recognition-indicator {
             display: flex;
             align-items: center;
@@ -586,7 +492,6 @@
             }
         }
         
-        /* Транскрипция в реальном времени */
         .interim-transcript {
             background: #f8f9fa;
             border-radius: 10px;
@@ -597,7 +502,6 @@
             border-left: 3px solid var(--voice-color);
         }
         
-        /* Группа кнопок */
         .button-group {
             display: flex;
             gap: 10px;
@@ -612,6 +516,27 @@
         
         .button-group .btn {
             flex: 1;
+        }
+        
+        .test-microphone {
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+        
+        .history-item {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .history-item:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(67, 97, 238, 0.15);
         }
     </style>
 </head>
@@ -628,7 +553,7 @@
         </div>
     </div>
 
-    <!-- Десктопный заголовок (обновленный) -->
+    <!-- Десктопный заголовок -->
     <div class="d-none d-md-block desktop-header-full">
         <div class="container desktop-full-width">
             <div class="text-center">
@@ -645,13 +570,12 @@
         </div>
     </div>
 
-    <!-- Основной контейнер (обновленный) -->
+    <!-- Основной контейнер -->
     <div class="container desktop-full-width py-3 py-md-4">
         <!-- Основной контент -->
         <div class="row row-full-width">
-            <!-- Левая колонка: Ввод и результаты - теперь на всю ширину -->
+            <!-- Левая колонка: Ввод и результаты -->
             <div class="col-lg-8-full">
-                
                 <!-- Ввод текста -->
                 <div class="card mb-3 mb-md-4">
                     <div class="card-body p-3 p-md-4">
@@ -673,7 +597,6 @@
                         <div id="recognitionIndicator" class="recognition-indicator d-none">
                             <span class="recognition-dot"></span>
                             <span id="recognitionStatus">Говорите...</span>
-                            <small class="text-muted" id="recognitionLanguage"></small>
                         </div>
                         
                         <!-- Промежуточные результаты распознавания -->
@@ -688,8 +611,14 @@
                             </button>
                             
                             <button id="voiceBtn" class="btn btn-voice btn-lg">
-                                <i class="fas fa-microphone me-2"></i>
                                 <span id="voiceBtnText">Голосовой ввод</span>
+                            </button>
+                        </div>
+                        
+                        <!-- Тест микрофона -->
+                        <div class="test-microphone text-center mb-3">
+                            <button id="testMicrophoneBtn" class="btn btn-outline-secondary btn-sm">
+                                <i class="fas fa-microphone-alt me-1"></i> Проверить микрофон
                             </button>
                         </div>
                         
@@ -706,6 +635,12 @@
                         <div id="voiceError" class="alert alert-warning d-none mt-3">
                             <i class="fas fa-exclamation-triangle me-2"></i>
                             <span id="voiceErrorMessage"></span>
+                        </div>
+                        
+                        <!-- Успешный тест микрофона -->
+                        <div id="micTestSuccess" class="alert alert-success d-none mt-3">
+                            <i class="fas fa-check-circle me-2"></i>
+                            <span>Микрофон работает! Нажмите "Голосовой ввод" для начала записи.</span>
                         </div>
                         
                         <!-- Примеры запросов -->
@@ -737,16 +672,12 @@
                 </div>
             </div>
 
-            <!-- Правая колонка (скрывается на десктопе) -->
-            <div class="col-lg-4 desktop-sidebar">
-                <!-- Здесь ваши боковые панели для мобильной версии -->
-            </div>
         </div>
 
         <!-- Футер -->
         <footer class="mt-4 mt-md-5 pt-3 pt-md-4 border-top text-center">
-            <p class="mb-1 small-screen-text">Классификатор интентов v2.0 с голосовым вводом</p>
-            <p class="small text-muted">Использует модель Random Forest и Web Speech API</p>
+            <p class="mb-1 small-screen-text">Классификатор интентов с голосовым вводом</p>
+            <p class="small text-muted">Поддерживается только русский язык</p>
         </footer>
     </div>
     
@@ -755,24 +686,19 @@
     <script>
         // Глобальные переменные
         let currentResults = null;
-        let mobileMenuOpen = false;
         
         // Переменные для голосового ввода
         let recognition = null;
         let isRecording = false;
         let finalTranscript = '';
         let recognitionSupported = false;
-        let currentLanguage = 'ru-RU';
-        let autoDetectLanguage = false;
         let recognitionTimeout = null;
+        let mediaStream = null;
 
         // Инициализация при загрузке страницы
         document.addEventListener('DOMContentLoaded', function() {
             // Проверка поддержки голосового ввода
             checkSpeechRecognitionSupport();
-            
-            // Загрузка конфигурации распознавания речи
-            loadSpeechConfig();
             
             // Проверка соединения
             checkConnection();
@@ -800,51 +726,82 @@
             
             if (SpeechRecognition) {
                 recognitionSupported = true;
-                recognition = new SpeechRecognition();
-                
-                // Настройка распознавания
-                recognition.continuous = true;
-                recognition.interimResults = true;
-                recognition.maxAlternatives = 3;
-                
-                // Обработка результатов
-                recognition.onresult = handleRecognitionResult;
-                recognition.onerror = handleRecognitionError;
-                recognition.onend = handleRecognitionEnd;
-                recognition.onstart = handleRecognitionStart;
+                console.log('Web Speech API поддерживается');
             } else {
                 recognitionSupported = false;
                 console.warn('Web Speech API не поддерживается в этом браузере');
+                showVoiceError('Голосовой ввод не поддерживается в вашем браузере. Используйте Chrome, Edge или Safari.');
             }
         }
-        
-        // Загрузка конфигурации распознавания речи
-        async function loadSpeechConfig() {
+
+        // Тест микрофона
+        async function testMicrophone() {
             try {
-                const response = await fetch('/speech_config');
-                const config = await response.json();
+                // Запрашиваем доступ к микрофону
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    audio: {
+                        echoCancellation: true,
+                        noiseSuppression: true,
+                        autoGainControl: true
+                    } 
+                });
                 
-                if (config.success) {
-                    // Заполняем селекторы языков
-                    const desktopSelect = document.getElementById('desktopLanguageSelect');
-                    const mobileSelect = document.getElementById('mobileLanguageSelect');
-                    
-                    let options = '';
-                    config.languages.forEach(lang => {
-                        options += `<option value="${lang.code}">${lang.name}</option>`;
-                    });
-                    
-                    desktopSelect.innerHTML = options;
-                    mobileSelect.innerHTML = options;
-                    
-                    // Устанавливаем язык по умолчанию
-                    desktopSelect.value = config.default_language;
-                    mobileSelect.value = config.default_language;
-                    currentLanguage = config.default_language;
-                }
+                // Если получили доступ, сохраняем stream и сразу закрываем
+                mediaStream = stream;
+                
+                // Останавливаем все треки
+                stream.getTracks().forEach(track => track.stop());
+                mediaStream = null;
+                
+                // Показываем сообщение об успехе
+                document.getElementById('micTestSuccess').classList.remove('d-none');
+                document.getElementById('voiceError').classList.add('d-none');
+                
+                // Скрываем сообщение через 5 секунд
+                setTimeout(() => {
+                    document.getElementById('micTestSuccess').classList.add('d-none');
+                }, 5000);
+                
+                return true;
             } catch (error) {
-                console.error('Ошибка загрузки конфигурации речи:', error);
+                console.error('Ошибка доступа к микрофону:', error);
+                
+                let errorMessage = '';
+                if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
+                    errorMessage = 'Доступ к микрофону запрещен. Пожалуйста, разрешите доступ в настройках браузера и перезагрузите страницу.';
+                } else if (error.name === 'NotFoundError' || error.name === 'DevicesNotFoundError') {
+                    errorMessage = 'Микрофон не найден. Подключите микрофон и попробуйте снова.';
+                } else if (error.name === 'NotReadableError' || error.name === 'TrackStartError') {
+                    errorMessage = 'Микрофон занят другим приложением. Закройте другие программы, использующие микрофон.';
+                } else {
+                    errorMessage = 'Не удалось получить доступ к микрофону: ' + error.message;
+                }
+                
+                showVoiceError(errorMessage);
+                return false;
             }
+        }
+
+        // Инициализация распознавания речи
+        function initRecognition() {
+            if (!recognitionSupported) return false;
+            
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            
+            // Настройка распознавания только на русский язык
+            recognition.lang = 'ru-RU';
+            recognition.continuous = true;
+            recognition.interimResults = true;
+            recognition.maxAlternatives = 1;
+            
+            // Обработка результатов
+            recognition.onresult = handleRecognitionResult;
+            recognition.onerror = handleRecognitionError;
+            recognition.onend = handleRecognitionEnd;
+            recognition.onstart = handleRecognitionStart;
+            
+            return true;
         }
         
         // Обработка результатов распознавания
@@ -877,7 +834,7 @@
                 interimElement.classList.add('d-none');
             }
             
-            // Автоматическая классификация при паузе (опционально)
+            // Автоматическая классификация при паузе
             if (newFinalTranscript && recognitionTimeout) {
                 clearTimeout(recognitionTimeout);
                 recognitionTimeout = setTimeout(() => {
@@ -906,6 +863,9 @@
                 case 'network':
                     errorMessage = 'Ошибка сети. Проверьте подключение к интернету.';
                     break;
+                case 'aborted':
+                    // Игнорируем, это нормально при остановке
+                    return;
                 default:
                     errorMessage = 'Ошибка распознавания: ' + event.error;
             }
@@ -917,13 +877,17 @@
         // Обработка завершения распознавания
         function handleRecognitionEnd() {
             if (isRecording) {
-                // Если запись еще активна (например, при паузе), перезапускаем
-                try {
-                    recognition.start();
-                } catch (e) {
-                    console.warn('Не удалось перезапустить распознавание:', e);
-                    stopRecording();
-                }
+                // Если запись еще активна, перезапускаем через небольшую задержку
+                setTimeout(() => {
+                    if (isRecording && recognition) {
+                        try {
+                            recognition.start();
+                        } catch (e) {
+                            console.warn('Не удалось перезапустить распознавание:', e);
+                            stopRecording();
+                        }
+                    }
+                }, 100);
             } else {
                 // Нормальное завершение
                 document.getElementById('voiceWaves').classList.add('d-none');
@@ -946,13 +910,14 @@
             errorMessageElement.textContent = message;
             errorElement.classList.remove('d-none');
             
+            // Автоматически скрываем через 7 секунд
             setTimeout(() => {
                 errorElement.classList.add('d-none');
-            }, 5000);
+            }, 7000);
         }
         
         // Начало записи
-        function startRecording() {
+        async function startRecording() {
             if (!recognitionSupported) {
                 showVoiceError('Голосовой ввод не поддерживается в вашем браузере. Используйте Chrome, Edge или Safari.');
                 return;
@@ -963,56 +928,50 @@
                 return;
             }
             
-            // Запрашиваем разрешение на микрофон
-            navigator.mediaDevices.getUserMedia({ audio: true })
-                .then(() => {
-                    // Получаем выбранный язык
-                    const desktopSelect = document.getElementById('desktopLanguageSelect');
-                    const mobileSelect = document.getElementById('mobileLanguageSelect');
-                    const isMobile = window.innerWidth <= 768;
-                    
-                    let selectedLang = isMobile ? mobileSelect.value : desktopSelect.value;
-                    
-                    if (selectedLang === 'auto') {
-                        // Для автоопределения используем пустой язык (браузер определит сам)
-                        recognition.lang = '';
-                        document.getElementById('recognitionLanguage').textContent = 'Автоопределение';
-                    } else {
-                        recognition.lang = selectedLang;
-                        document.getElementById('recognitionLanguage').textContent = 
-                            desktopSelect.options[desktopSelect.selectedIndex].text;
+            try {
+                // Сначала проверяем микрофон
+                const micTestResult = await testMicrophone();
+                if (!micTestResult) {
+                    return;
+                }
+                
+                // Инициализируем распознавание если нужно
+                if (!recognition) {
+                    if (!initRecognition()) {
+                        showVoiceError('Не удалось инициализировать распознавание речи');
+                        return;
                     }
-                    
-                    currentLanguage = selectedLang;
-                    
-                    // Очищаем предыдущий результат
-                    finalTranscript = '';
-                    
-                    // Начинаем запись
-                    recognition.start();
-                    isRecording = true;
-                    
-                    // Обновляем UI
-                    const voiceBtn = document.getElementById('voiceBtn');
-                    const voiceBtnText = document.getElementById('voiceBtnText');
-                    
-                    voiceBtn.classList.add('recording');
-                    voiceBtnText.innerHTML = '<i class="fas fa-stop me-2"></i>Остановить';
-                    
-                    document.getElementById('recognitionStatus').textContent = 'Говорите...';
-                    document.getElementById('voiceError').classList.add('d-none');
-                    
-                    // Автоматическая остановка через 30 секунд (для экономии ресурсов)
-                    setTimeout(() => {
-                        if (isRecording) {
-                            stopRecording();
-                        }
-                    }, 30000);
-                })
-                .catch(error => {
-                    console.error('Ошибка доступа к микрофону:', error);
-                    showVoiceError('Не удалось получить доступ к микрофону. Проверьте разрешения.');
-                });
+                }
+                
+                // Очищаем предыдущий результат
+                finalTranscript = '';
+                
+                // Начинаем запись
+                recognition.start();
+                isRecording = true;
+                
+                // Обновляем UI
+                const voiceBtn = document.getElementById('voiceBtn');
+                const voiceBtnText = document.getElementById('voiceBtnText');
+                
+                voiceBtn.classList.add('recording');
+                voiceBtnText.innerHTML = '<i class="fas fa-stop me-2"></i>Остановить';
+                
+                document.getElementById('recognitionStatus').textContent = 'Говорите...';
+                document.getElementById('voiceError').classList.add('d-none');
+                document.getElementById('micTestSuccess').classList.add('d-none');
+                
+                // Автоматическая остановка через 30 секунд (для экономии ресурсов)
+                setTimeout(() => {
+                    if (isRecording) {
+                        stopRecording();
+                    }
+                }, 30000);
+                
+            } catch (error) {
+                console.error('Ошибка при запуске записи:', error);
+                showVoiceError('Не удалось запустить запись: ' + error.message);
+            }
         }
         
         // Остановка записи
@@ -1051,21 +1010,12 @@
         
         // Адаптация для мобильных устройств
         function adaptForMobile() {
-            // Улучшение видимости на маленьких экранах
             if (window.innerWidth <= 768) {
-                // Увеличиваем зону клика для кнопок
                 document.querySelectorAll('.btn, .example-query, .history-item').forEach(el => {
                     el.style.minHeight = '44px';
                     el.style.display = 'flex';
                     el.style.alignItems = 'center';
                     el.style.justifyContent = 'center';
-                });
-                
-                // Улучшаем читаемость текста
-                document.querySelectorAll('p, span, div').forEach(el => {
-                    if (el.classList.length === 0) {
-                        el.style.fontSize = 'calc(1rem + 0.5vw)';
-                    }
                 });
             }
         }
@@ -1075,13 +1025,6 @@
             // Кнопка классификации
             const classifyBtn = document.getElementById('classifyBtn');
             classifyBtn.addEventListener('click', classifyText);
-            classifyBtn.addEventListener('touchstart', function(e) {
-                e.preventDefault();
-                this.style.opacity = '0.8';
-            });
-            classifyBtn.addEventListener('touchend', function() {
-                this.style.opacity = '1';
-            });
             
             // Кнопка голосового ввода
             const voiceBtn = document.getElementById('voiceBtn');
@@ -1093,6 +1036,13 @@
                 }
             });
             
+            // Кнопка теста микрофона
+            const testMicBtn = document.getElementById('testMicrophoneBtn');
+            testMicBtn.addEventListener('click', async function(e) {
+                e.preventDefault();
+                await testMicrophone();
+            });
+            
             // Текстовое поле
             const inputText = document.getElementById('inputText');
             inputText.addEventListener('keydown', function(e) {
@@ -1101,40 +1051,10 @@
                 }
             });
             
-            // Мобильная клавиатура (Enter на мобильных)
-            inputText.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter' && window.innerWidth <= 768) {
-                    e.preventDefault();
-                    classifyText();
-                }
-            });
-            
-            // Синхронизация селекторов языка
-            const desktopSelect = document.getElementById('desktopLanguageSelect');
-            const mobileSelect = document.getElementById('mobileLanguageSelect');
-            
-            desktopSelect.addEventListener('change', function() {
-                mobileSelect.value = this.value;
-                currentLanguage = this.value;
-            });
-            
-            mobileSelect.addEventListener('change', function() {
-                desktopSelect.value = this.value;
-                currentLanguage = this.value;
-            });
-            
-            // Кнопки очистки истории
+            // Кнопка очистки истории
             const clearHistoryBtn = document.getElementById('clearHistoryBtn');
-            const mobileClearHistoryBtn = document.getElementById('mobileClearHistoryBtn');
-            
             if (clearHistoryBtn) {
                 clearHistoryBtn.addEventListener('click', clearHistory);
-            }
-            if (mobileClearHistoryBtn) {
-                mobileClearHistoryBtn.addEventListener('click', function() {
-                    clearHistory();
-                    toggleMobileMenu();
-                });
             }
             
             // Обработка изменения размера окна
@@ -1186,42 +1106,26 @@
                 
                 if (data.success) {
                     const systemInfoDiv = document.getElementById('systemInfo');
-                    systemInfoDiv.innerHTML = `
-                        <div>
-                            <div class="small-screen-text">
-                                <div class="d-flex flex-wrap justify-content-end gap-2">
-                                    <span class="badge bg-info">Модель: ${data.model_info.type || 'RF'}</span>
-                                    <span class="badge bg-secondary">Классов: ${data.original_classes}</span>
-                                    <span class="badge bg-success">Порог: ${(data.confidence_threshold * 100).toFixed(0)}%</span>
+                    if (systemInfoDiv) {
+                        systemInfoDiv.innerHTML = `
+                            <div>
+                                <div class="small-screen-text">
+                                    <div class="d-flex flex-wrap justify-content-end gap-2">
+                                        <span class="badge bg-info">Модель: ${data.model_info.type || 'RF'}</span>
+                                        <span class="badge bg-secondary">Классов: ${data.original_classes}</span>
+                                        <span class="badge bg-success">Порог: ${(data.confidence_threshold * 100).toFixed(0)}%</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    `;
-                    
-                    // Загрузка категорий для десктопа
-                    loadCategories(data.categories);
+                        `;
+                    }
                 }
             } catch (error) {
                 console.error('Ошибка загрузки информации:', error);
             }
         }
 
-        // Загрузка категорий (десктоп)
-        function loadCategories(categories) {
-            const container = document.getElementById('categoriesList');
-            const countSpan = document.getElementById('categoriesCount');
-            
-            if (categories && categories.length > 0) {
-                container.innerHTML = categories.map(cat => 
-                    `<span class="badge bg-primary category-badge">${cat}</span>`
-                ).join('');
-                countSpan.textContent = categories.length;
-            } else {
-                container.innerHTML = '<p class="text-muted small">Категории не загружены</p>';
-            }
-        }
-
-        // Обновите функцию loadExamples для использования новой сетки
+        // Загрузка примеров
         async function loadExamples() {
             try {
                 const response = await fetch('/example_queries');
@@ -1253,7 +1157,6 @@
         function useExample(text) {
             document.getElementById('inputText').value = text;
             if (window.innerWidth <= 768) {
-                // На мобильных фокусируемся на поле ввода
                 document.getElementById('inputText').focus();
             }
             classifyText();
@@ -1296,9 +1199,6 @@
                 // Обновляем статистику и историю
                 loadStatistics();
                 loadHistory();
-                if (mobileMenuOpen) {
-                    loadMobileHistory();
-                }
                 
             } catch (error) {
                 showMobileAlert('Ошибка соединения: ' + error.message);
@@ -1314,7 +1214,6 @@
         // Показ алерта на мобильных
         function showMobileAlert(message) {
             if (window.innerWidth <= 768) {
-                // Создаем красивый алерт для мобильных
                 const alertDiv = document.createElement('div');
                 alertDiv.className = 'alert alert-danger position-fixed top-0 start-0 w-100 m-0 rounded-0 border-0';
                 alertDiv.style.zIndex = '1060';
@@ -1330,7 +1229,6 @@
                 
                 document.body.appendChild(alertDiv);
                 
-                // Авто-удаление через 3 секунды
                 setTimeout(() => {
                     if (alertDiv.parentNode) {
                         alertDiv.remove();
@@ -1359,7 +1257,6 @@
             const confidenceColor = data.is_confident ? 'success' : 'warning';
             const confidenceWidth = Math.min(100, confidencePercent);
             
-            // Анимация появления
             container.style.opacity = '0';
             container.style.transform = 'translateY(20px)';
             
@@ -1399,7 +1296,6 @@
                         </div>
             `;
             
-            // Дополнительные варианты
             if (data.all_predictions && data.all_predictions.length > 1) {
                 html += `
                     <div class="mt-4 pt-3 border-top">
@@ -1436,7 +1332,6 @@
                 `;
             }
             
-            // Время обработки
             html += `
                     <div class="mt-3 pt-3 border-top">
                         <div class="d-flex justify-content-between align-items-center">
@@ -1456,14 +1351,12 @@
             container.innerHTML = html;
             currentResults = data;
             
-            // Анимация появления
             setTimeout(() => {
                 container.style.opacity = '1';
                 container.style.transform = 'translateY(0)';
                 container.style.transition = 'opacity 0.3s, transform 0.3s';
             }, 10);
             
-            // Прокрутка к результатам на мобильных
             if (window.innerWidth <= 768) {
                 setTimeout(() => {
                     container.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -1498,6 +1391,8 @@
                 
                 if (data.success) {
                     const container = document.getElementById('statistics');
+                    if (!container) return;
+                    
                     const isMobile = window.innerWidth <= 768;
                     
                     container.innerHTML = `
@@ -1531,6 +1426,8 @@
                 
                 if (data.success && data.history.length > 0) {
                     const container = document.getElementById('history');
+                    if (!container) return;
+                    
                     const isMobile = window.innerWidth <= 768;
                     
                     let historyHtml = '';
@@ -1572,20 +1469,11 @@
         function useHistoryItem(text) {
             document.getElementById('inputText').value = text;
             classifyText();
-            
-            // Закрываем мобильное меню если оно открыто
-            if (mobileMenuOpen) {
-                toggleMobileMenu();
-            }
         }
 
         // Очистка истории
         async function clearHistory() {
-            if (window.innerWidth <= 768) {
-                if (!confirm('Очистить историю запросов?')) return;
-            } else {
-                if (!confirm('Вы уверены, что хотите очистить историю запросов?')) return;
-            }
+            if (!confirm('Вы уверены, что хотите очистить историю запросов?')) return;
             
             try {
                 const response = await fetch('/clear_history', {
@@ -1596,9 +1484,6 @@
                 if (data.success) {
                     loadHistory();
                     loadStatistics();
-                    if (mobileMenuOpen) {
-                        loadMobileHistory();
-                    }
                     showMobileAlert('История очищена');
                 }
             } catch (error) {
