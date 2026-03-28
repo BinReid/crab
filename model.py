@@ -15,11 +15,8 @@ import string
 from sklearn.preprocessing import StandardScaler
 
 # Импорт моделей
-from sklearn.linear_model import LogisticRegression
-from sklearn.svm import SVC, LinearSVC
-from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.naive_bayes import MultinomialNB
-from xgboost import XGBClassifier
 from sklearn.neural_network import MLPClassifier
 from sklearn.multiclass import OneVsRestClassifier
 
@@ -99,39 +96,11 @@ def train_and_evaluate_models(X_train, X_test, y_train, y_test, random_state=42)
     # 2. Список моделей для тестирования
     models = {
         'Multinomial Naive Bayes': MultinomialNB(),
-        'Linear SVM': LinearSVC(
-            random_state=random_state,
-            class_weight='balanced',
-            max_iter=2000
-        ),
-        'Logistic Regression': LogisticRegression(
-            max_iter=2000, 
-            random_state=random_state,
-            class_weight='balanced',
-            solver='liblinear'
-        ),
         'Random Forest': RandomForestClassifier(
             n_estimators=100, 
             random_state=random_state,
             class_weight='balanced_subsample',
             n_jobs=-1
-        ),
-        'Gradient Boosting': GradientBoostingClassifier(
-            n_estimators=100, 
-            random_state=random_state,
-            subsample=0.8
-        ),
-        'XGBoost': XGBClassifier(
-            n_estimators=100,
-            random_state=random_state,
-            eval_metric='mlogloss',
-            use_label_encoder=False,
-            n_jobs=-1
-        ),
-        'SVM (RBF)': SVC(
-            probability=True, 
-            random_state=random_state,
-            class_weight='balanced'
         ),
     }
     
@@ -146,10 +115,6 @@ def train_and_evaluate_models(X_train, X_test, y_train, y_test, random_state=42)
         start_time = time.time()
         
         try:
-            # Для многоклассовой классификации с несбалансированными данными
-            if name in ['SVM (RBF)', 'Linear SVM']:
-                # Используем OneVsRest для SVM
-                model = OneVsRestClassifier(model)
             
             # Обучение модели
             model.fit(X_train, y_train)
@@ -291,8 +256,6 @@ def visualize_results(results, y_test, class_names=None):
         plt.colorbar(im, ax=axes[3])
     
     plt.tight_layout()
-    plt.savefig('model_comparison.png', dpi=300, bbox_inches='tight')
-    plt.show()
     
     # Сохранение таблицы с результатами
     results_df = pd.DataFrame({
