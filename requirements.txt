@@ -1,8 +1,8 @@
 joblib
-pickle
+pypickle
 seaborn
 matplotlib
 numpy
-sklearn
+scikit-learn
 pandas
 Flask
